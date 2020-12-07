@@ -1,0 +1,79 @@
+<template>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10">
+        <h1>Test Configuration Generator</h1>
+        <hr>
+        <alert size="sm" show :message=message v-if="showMessage"></alert>
+        <b-row>
+          <b-col>
+            <b-button pill variant="success" size="sm" v-b-modal.add-parameter-form>
+              <b-icon icon="plus-square-fill" aria-hidden="true" font-scale="1.5">
+              </b-icon>
+              Add Parameter
+            </b-button>
+          </b-col>
+          <b-col>
+            <b-button pill variant="info" size="sm" v-b-modal.generate_configurations-form>
+              <b-icon icon="play-fill" aria-hidden="true" font-scale="1.5">
+              </b-icon>
+              Generate Configurations
+            </b-button>
+          </b-col>
+        </b-row>
+        <parameter-set :parameterSet="parameterSet"
+                       @alert-message="onAlertMessage($event)"
+                       @reload-parameter-set="getParameterSet($event)">
+        </parameter-set>
+      </div>
+    </div>
+    <hr>
+    <configurations :parameterSet="parameterSet"
+                    @alert-message="onAlertMessage($event)">
+    </configurations>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import Config from './config';
+import Alert from './Alert.vue';
+import ParameterSet from './ParameterSet.vue';
+import Configurations from './Configurations.vue';
+
+export default {
+  data() {
+    return {
+      parameterSet: {},
+      message: '',
+      showMessage: false,
+    };
+  },
+  components: {
+    alert: Alert,
+    'parameter-set': ParameterSet,
+    configurations: Configurations,
+  },
+  methods: {
+    getParameterSet() {
+      const path = Config.apiPrefix.concat('parameterset/');
+      axios.get(path)
+        .then((res) => {
+          this.parameterSet = res.data.parameter_set;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+    onAlertMessage(message) {
+      this.message = message;
+      this.showMessage = true;
+    },
+  },
+  created() {
+    this.getParameterSet();
+  },
+};
+
+</script>
