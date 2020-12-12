@@ -1,5 +1,7 @@
 # tconfig-client
 
+# Browser client for the TConfig test configuration generator
+
 ## Project setup
 ```
 npm install
