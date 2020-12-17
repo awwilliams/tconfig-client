@@ -21,7 +21,6 @@
                     :index="vindex"
                     @edit-value="onEditValue($event)"
                     @reload-parameter-set="onReloadParameterSet"
-                    @move-value="onMoveValue($event)"
                     @alert-message="onAlertMessage($event)">
         </value-item>
       </div>
