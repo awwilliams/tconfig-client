@@ -8,6 +8,11 @@
         </b-button>
       </b-col>
       <b-col>
+        <b-button pill variant="outline-dark" size="sm" class="mr-2">
+          <b-icon icon="arrow-down-up" aria-hidden="true"></b-icon> Drag to reorder
+        </b-button>
+      </b-col>
+      <b-col>
         <div class="btn-group" role="group">
           <b-button pill variant="warning" size="sm" class="mr-2"
                     v-b-modal.edit-parameter-form
@@ -19,16 +24,6 @@
                     @click="onDeleteParameter">
             <b-icon icon="trash" aria-hidden="true"></b-icon>
             Delete
-          </b-button>
-          <b-button pill variant="outline-info" size="sm" class="mr-2"
-                    @click="onMoveUpParameter"
-                    :disabled="isDisableMoveUp()">
-            <b-icon icon="caret-up-fill" aria-hidden="true"></b-icon>
-          </b-button>
-          <b-button pill variant="outline-info" size="sm" class="mr-2"
-                    @click="onMoveDownParameter"
-                    :disabled="isDisableMoveDown()">
-            <b-icon icon="caret-down-fill" aria-hidden="true"></b-icon>
           </b-button>
         </div>
       </b-col>
@@ -85,40 +80,6 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.reloadParameterSet();
-        });
-    },
-    isDisableMoveUp() {
-      return this.index === 0;
-    },
-    onMoveUpParameter() {
-      const oldIndex = parseInt(this.parameter.position, 10);
-      const newIndex = oldIndex - 1;
-      this.moveParameter(this.parameter.name, oldIndex, newIndex);
-    },
-    isDisableMoveDown() {
-      return this.index >= this.parameterSet.parameters.length - 1;
-    },
-    onMoveDownParameter() {
-      const oldIndex = parseInt(this.parameter.position, 10);
-      const newIndex = oldIndex + 1;
-      this.moveParameter(this.parameter.name, oldIndex, newIndex);
-    },
-    moveParameter(name, oldIndex, newIndex) {
-      const path = Config.apiPrefix.concat('parameters/');
-      const payload = {
-        oldIndex,
-        newIndex,
-      };
-      axios.put(path, payload)
-        .then(() => {
-          this.reloadParameterSet();
-          const message = `Parameter "${name}" moved from position ${oldIndex} to ${newIndex}`;
-          this.alertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
           this.reloadParameterSet();
         });
     },

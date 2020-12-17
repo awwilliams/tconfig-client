@@ -3,6 +3,11 @@
     <b-row size="sm">
       <b-col>{{value.name}}</b-col>
       <b-col>
+        <b-button pill variant="outline-info" size="sm" class="mr-2">
+          <b-icon icon="arrow-down-up" aria-hidden="true"></b-icon>
+        </b-button>
+      </b-col>
+      <b-col>
         <div class="btn-group" role="group">
           <b-button pill variant="warning" size="sm" class="mr-2"
                     v-b-modal.edit-value-form
@@ -12,16 +17,6 @@
           <b-button pill variant="danger" size="sm" class="mr-2"
                     @click="onDeleteValue(parameter, value)">
             <b-icon icon="trash" aria-hidden="true"></b-icon>
-          </b-button>
-          <b-button pill variant="outline-info" size="sm" class="mr-2"
-                    @click="onMoveUpValue(parameter, value)"
-                    :disabled="isDisableMoveUpValue()">
-            <b-icon icon="caret-up-fill" aria-hidden="true"></b-icon>
-          </b-button>
-          <b-button pill variant="outline-info" size="sm" class="mr-2"
-                    @click="onMoveDownValue(parameter, value)"
-                    :disabled="isDisableMoveDownValue()">
-            <b-icon icon="caret-down-fill" aria-hidden="true"></b-icon>
           </b-button>
         </div>
       </b-col>
@@ -79,41 +74,6 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.reloadParameterSet();
-        });
-    },
-    isDisableMoveUpValue() {
-      return this.index === 0;
-    },
-    onMoveUpValue() {
-      const oldIndex = parseInt(this.value.position, 10);
-      const newIndex = oldIndex - 1;
-      this.moveValue(this.parameter, this.value.name, oldIndex, newIndex);
-    },
-    isDisableMoveDownValue() {
-      return this.index >= this.parameter.values.length - 1;
-    },
-    onMoveDownValue() {
-      const oldIndex = parseInt(this.value.position, 10);
-      const newIndex = oldIndex + 1;
-      this.moveValue(this.parameter, this.value.name, oldIndex, newIndex);
-    },
-    moveValue(parameter, name, oldIndex, newIndex) {
-      const path = Config.apiPrefix.concat(`parameters/${parameter.uid}/values/`);
-      const payload = {
-        oldIndex,
-        newIndex,
-      };
-      axios.put(path, payload)
-        .then(() => {
-          this.reloadParameterSet();
-          let message = `Value "${name}" moved from position ${oldIndex} to ${newIndex}`;
-          message = message.concat(` within parameter "${parameter.name}"`);
-          this.alertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
           this.reloadParameterSet();
         });
     },

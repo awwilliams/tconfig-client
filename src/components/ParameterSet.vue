@@ -1,17 +1,20 @@
 <template>
   <div>
-    <div :key="pindex"
-         v-for="(parameter,pindex) in parameterSet.parameters" role="tablist">
-      <parameter-card :parameterSet="parameterSet"
-                      :parameter="parameter"
-                      :index="pindex"
-                      @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
-                      @add-value="$refs.addValueForm.setParameter($event)"
-                      @edit-value="$refs.editValueForm.onEditValue($event)"
-                      @reload-parameter-set="onReloadParameterSet"
-                      @alert-message="onAlertMessage($event)">
-      </parameter-card>
-    </div>
+    <draggable v-model="parameterSet.parameters" group="parameters"
+               @start="drag=true" @end="drag=false" @change="onDragChange($event)">
+      <div :key="pindex"
+           v-for="(parameter,pindex) in parameterSet.parameters" role="tablist">
+        <parameter-card :parameterSet="parameterSet"
+                        :parameter="parameter"
+                        :index="pindex"
+                        @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
+                        @add-value="$refs.addValueForm.setParameter($event)"
+                        @edit-value="$refs.editValueForm.onEditValue($event)"
+                        @reload-parameter-set="onReloadParameterSet"
+                        @alert-message="onAlertMessage($event)">
+        </parameter-card>
+      </div>
+    </draggable>
     <add-parameter-form ref="addParameterForm"
                         @alert-message="onAlertMessage($event)"
                         @reload-parameter-set="onReloadParameterSet">
@@ -32,6 +35,10 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
+import axios from 'axios';
+import Config from './config';
+
 import ParameterCard from './ParameterCard.vue';
 import AddParameterForm from './AddParameterForm.vue';
 import EditParameterForm from './EditParameterForm.vue';
@@ -43,6 +50,7 @@ export default {
     parameterSet: Object,
   },
   components: {
+    draggable,
     'parameter-card': ParameterCard,
     'add-parameter-form': AddParameterForm,
     'edit-parameter-form': EditParameterForm,
@@ -55,6 +63,31 @@ export default {
     },
     onReloadParameterSet() {
       this.$emit('reload-parameter-set');
+    },
+    onDragChange(eventInfo) {
+      if ('moved' in eventInfo) {
+        const { oldIndex, newIndex } = eventInfo.moved;
+        const movedParameter = this.parameterSet.parameters[newIndex];
+        this.moveParameter(movedParameter.name, oldIndex, newIndex);
+      }
+    },
+    moveParameter(name, oldIndex, newIndex) {
+      const path = Config.apiPrefix.concat('parameters/');
+      const payload = {
+        oldIndex,
+        newIndex,
+      };
+      axios.put(path, payload)
+        .then(() => {
+          this.onReloadParameterSet();
+          const message = `Parameter "${name}" moved from position ${oldIndex} to ${newIndex}`;
+          this.onAlertMessage(message);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+          this.onReloadParameterSet();
+        });
     },
   },
 };
