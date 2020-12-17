@@ -2,14 +2,16 @@
   <div class="container">
     <div class="col-sm-10">
       <b-row>
+        <b-col></b-col>
         <b-col>
-          <label>Number of configurations per page</label>
+          <label>Configurations per page</label>
         </b-col>
         <b-col>
           <b-form-select class="w-10" v-model="perPage"
                          :options="options">
           </b-form-select>
         </b-col>
+        <b-col></b-col>
       </b-row>
     </div>
     <p></p>
