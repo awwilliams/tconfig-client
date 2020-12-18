@@ -1,9 +1,8 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-sm-10">
-        <h1>Test Configuration Generator</h1>
-        <hr>
+      <div class="col-sm-12">
+        <h4>Test Configuration Generator</h4>
         <alert size="sm" show :message=message v-if="showMessage"></alert>
         <b-row>
           <b-col>
@@ -21,6 +20,7 @@
             </b-button>
           </b-col>
         </b-row>
+        <hr>
         <parameter-set :parameterSet="parameterSet"
                        @alert-message="onAlertMessage($event)"
                        @reload-parameter-set="getParameterSet($event)">

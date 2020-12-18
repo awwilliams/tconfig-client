@@ -1,25 +1,23 @@
 <template>
   <div class="container">
-    <div class="col-sm-10">
+    <div class="col-sm-12">
       <b-row>
-        <b-col></b-col>
-        <b-col>
+        <b-col class="col-sm-6 text-right">
           <label>Configurations per page</label>
         </b-col>
-        <b-col>
+        <b-col class="col-sm-2">
           <b-form-select class="w-10" v-model="perPage"
                          :options="options">
           </b-form-select>
         </b-col>
-        <b-col></b-col>
       </b-row>
     </div>
     <p></p>
     <b-table size="sm" striped hover :items="configurations"
              :current-page="currentPage" :per-page="perPage">
     </b-table>
-    <div class="justify-content-center row my-1">
-      <b-pagination size="md" :total-rows="configurations.length"
+    <div class="justify-content-center row my-0">
+      <b-pagination size="sm" :total-rows="configurations.length"
                     :per-page="perPage" v-model="currentPage"/>
     </div>
     <generate-configurations-form ref="generateConfigurationsForm"

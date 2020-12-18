@@ -1,7 +1,7 @@
 <template>
   <b-card-header header-tag="header" class="p-1" role="tab">
     <b-row>
-      <b-col>
+      <b-col class="col-6">
         <b-button size="sm" block href="#" v-b-toggle="'accordion-' + index"
                   variant="outline-secondary">{{parameter.name}} -
           {{parameter.values.length}} values
