@@ -1,8 +1,11 @@
 <template>
   <b-card-body>
     <b-row class="row align-items-start">
-      <b-col>
-        <b-button class="row align-items-start" pill variant="success" size="sm"
+      <b-col class="col-sm-1">
+        <p>Values</p>
+      </b-col>
+      <b-col class="col-sm-6">
+        <b-button pill variant="success" size="sm"
                   v-b-modal.add-value-form
                   @click="onAddValue">
           <b-icon icon="plus-square-fill" aria-hidden="true" font-scale="1.5">
@@ -10,8 +13,8 @@
           Add Value
         </b-button>
       </b-col>
-      <b-col></b-col>
     </b-row>
+    <hr>
     <ul class="list-group list-group-flush">
     <draggable v-model="parameter.values" group="values"
                @start="drag=true" @end="drag=false" @change="onDragChange($event)">

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h6 class="text-left">Parameters:</h6>
     <draggable v-model="parameterSet.parameters" group="parameters"
                @start="drag=true" @end="drag=false" @change="onDragChange($event)">
       <div :key="pindex"
