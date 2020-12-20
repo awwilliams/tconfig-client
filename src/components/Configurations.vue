@@ -13,7 +13,7 @@
       </b-row>
     </div>
     <p></p>
-    <b-table size="sm" striped hover :items="configurations"
+    <b-table size="sm" striped hover bordered :items="configurations"
              :current-page="currentPage" :per-page="perPage">
     </b-table>
     <div class="justify-content-center row my-0">
@@ -65,7 +65,11 @@ export default {
       this.configurationSet.configurations.forEach((config) => {
         const displayConfig = {};
         Object.entries(config).forEach(([key, value]) => {
-          displayConfig[key] = value.name;
+          if (!value.name) {
+            displayConfig[key] = '***';
+          } else {
+            displayConfig[key] = value.name;
+          }
         });
         this.configurations.push(displayConfig);
       });
