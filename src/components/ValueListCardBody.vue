@@ -16,9 +16,9 @@
     </b-row>
     <hr>
     <ul class="list-group list-group-flush">
-    <draggable v-model="parameter.values" group="values"
+    <draggable v-model="valueList" group="values" item-key="uid"
                @start="drag=true" @end="drag=false" @change="onDragChange($event)">
-      <div :key="vindex" v-for="(value,vindex) in parameter.values" role="tablist">
+      <div :key="value.uid" v-for="(value,vindex) in valueList" role="tablist">
         <value-item :parameter="parameter"
                     :value="value"
                     :index="vindex"
@@ -47,6 +47,23 @@ export default {
     draggable,
     'value-item': ValueItem,
   },
+  // Take a copy of the list of values to set up drag and
+  // drop for re-ordering parameters - mutating a prop directly
+  // is a Vue anti-pattern, and deprecated.
+  watch: {
+    parameter(newVal) {
+      if ('values' in newVal) {
+        this.valueList = [...newVal.values];
+      } else {
+        this.ValueList = [];
+      }
+    },
+  },
+  data() {
+    return {
+      valueList: [],
+    };
+  },
   methods: {
     onAlertMessage(message) {
       this.$emit('alert-message', message);
@@ -63,7 +80,7 @@ export default {
     onDragChange(eventInfo) {
       if ('moved' in eventInfo) {
         const { oldIndex, newIndex } = eventInfo.moved;
-        const movedValue = this.parameter.values[newIndex];
+        const movedValue = this.valueList[newIndex];
         this.moveValue(this.parameter, movedValue.name, oldIndex, newIndex);
       }
     },
@@ -89,6 +106,9 @@ export default {
           this.onReloadParameterSet();
         });
     },
+  },
+  created() {
+    this.valueList = [...this.parameter.values];
   },
 };
 

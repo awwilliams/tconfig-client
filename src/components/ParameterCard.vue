@@ -1,7 +1,6 @@
 <template>
   <b-card no-body class="mb-1">
-    <parameter-item :parameterSet="parameterSet"
-                    :parameter="parameter"
+    <parameter-item :parameter="parameter"
                     :index="index"
                     @edit-parameter="onEditParameter($event)"
                     @reload-parameter-set="onReloadParameterSet"
@@ -24,7 +23,6 @@ import ValueListCardBody from './ValueListCardBody.vue';
 
 export default {
   props: {
-    parameterSet: Object,
     parameter: Object,
     index: Number,
   },
