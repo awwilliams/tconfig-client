@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Tconfig from '../components/Tconfig.vue';
+import AboutTconfig from '../components/AboutTconfig.vue';
 
 Vue.use(VueRouter);
 
@@ -12,6 +13,11 @@ const router = new VueRouter({
       path: '/',
       name: 'TConfig',
       component: Tconfig,
+    },
+    {
+      path: '/about',
+      name: 'AboutTConfig',
+      component: AboutTconfig,
     },
   ],
 });
