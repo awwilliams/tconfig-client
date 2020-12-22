@@ -37,7 +37,6 @@ import Config from './config';
 
 export default {
   props: {
-    parameterSet: Object,
     parameter: Object,
     index: Number,
   },

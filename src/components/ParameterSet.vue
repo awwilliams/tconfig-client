@@ -1,12 +1,11 @@
 <template>
   <div>
     <h6 class="text-left">Parameters:</h6>
-    <draggable v-model="parameterSet.parameters" group="parameters"
+    <draggable v-model="parameterList" group="parameters" item-key="uid"
                @start="drag=true" @end="drag=false" @change="onDragChange($event)">
-      <div :key="pindex"
-           v-for="(parameter,pindex) in parameterSet.parameters" role="tablist">
-        <parameter-card :parameterSet="parameterSet"
-                        :parameter="parameter"
+      <div :key="parameter.uid"
+           v-for="(parameter,pindex) in parameterList" role="tablist">
+        <parameter-card :parameter="parameter"
                         :index="pindex"
                         @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
                         @add-value="$refs.addValueForm.setParameter($event)"
@@ -50,6 +49,23 @@ export default {
   props: {
     parameterSet: Object,
   },
+  // Take a copy of the list of parameters to set up drag and
+  // drop for re-ordering parameters - mutating a prop directly
+  // is a Vue anti-pattern, and deprecated.
+  watch: {
+    parameterSet(newVal) {
+      if ('parameters' in newVal) {
+        this.parameterList = [...newVal.parameters];
+      } else {
+        this.parameterList = [];
+      }
+    },
+  },
+  data() {
+    return {
+      parameterList: [],
+    };
+  },
   components: {
     draggable,
     'parameter-card': ParameterCard,
@@ -68,7 +84,7 @@ export default {
     onDragChange(eventInfo) {
       if ('moved' in eventInfo) {
         const { oldIndex, newIndex } = eventInfo.moved;
-        const movedParameter = this.parameterSet.parameters[newIndex];
+        const movedParameter = this.parameterList[newIndex];
         this.moveParameter(movedParameter.name, oldIndex, newIndex);
       }
     },
@@ -90,6 +106,9 @@ export default {
           this.onReloadParameterSet();
         });
     },
+  },
+  created() {
+    this.parameterList = [...this.parameterSet.parameters];
   },
 };
 
