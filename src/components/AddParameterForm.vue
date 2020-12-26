@@ -3,7 +3,7 @@
            id="add-parameter-form"
            title="Add a new parameter"
            hide-footer>
-    <b-form @submit="onSubmitAddParameter" @reset="onResetAddParameter" class="w-100">
+    <b-form @submit="onSubmitAddParameter" @reset="onResetAddParameter">
       <b-form-group id="form-add-parameter-name-group"
                     label="Name:"
                     label-for="form-add-parameter-name-input">

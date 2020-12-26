@@ -1,47 +1,51 @@
 <template>
-  <div class="container text-left">
-    <h1 class="md">TConfig - Test Configuration Generator</h1>
-    <h2>Introduction</h2>
-    <p>
-      TConfig - the Test Configuration Generator - generates covering arrays for
-      combinatorial coverage of parameters with discrete values.  An instance of
-      this type of coverage is "pair-wise" coverage, which is that all pairs of
-      parameter values are covered in at least one test configuration.
-    </p>
-    <p>
-      For example,suppose that you had to test a Python program that offered a REST API
-      and a browser client (such as this one &#127773;), and cross-platform functionality is a
-      concern.  Here are four parameters of interest, and a set of values for each parameter.
-    </p>
-    <b-table size="sm" striped hover :items="parameters">
-    </b-table>
-    <hr>
-    <p>
-      Testing all possible combinations would require 3 &times; 4 &times; 4 &times; 3 = 144
-      configurations.
-    </p>
-    <p>
-      Suppose that it would be acceptable to include every pair-wise interaction
-      in some test configuration, but that it is unlikely that there would be some issue
-      that would only appear if there was a particular 3-way or 4-way combination of values.
-      Then, a covering array of degree 2 would suffice.
-    </p>
-    <p>
-      Here is a covering array of degree 2 for the above parameters and values.  It consists
-      of only 16 configurations. Note that not all values are specified, as coverage is achieved
-      without a particular value in some slot.  Of course, a value would typically need to be
-      provided to complete the configuration, but any value will do.
-    </p>
-    <p>
-      To check pair-wise coverage:  deselect columns until there are 2 columns left.  Verify
-      that all possible combinations of the values for those 2 columns are contained within (at
-      least one) configuration.
-    </p>
-    <b-row class="col-sm-12">
-      <b-col class="col-sm-4 font-weight-bold">
+  <b-container>
+    <b-row>
+      <b-col cols="12" class="text-left">
+        <h1 class="md text-center">TConfig - Test Configuration Generator</h1>
+        <h2>Introduction</h2>
+        <p>
+          TConfig - the Test Configuration Generator - generates covering arrays for
+          combinatorial coverage of parameters with discrete values.  An instance of
+          this type of coverage is "pair-wise" coverage, which is that all pairs of
+          parameter values are covered in at least one test configuration.
+        </p>
+        <p>
+          For example,suppose that you had to test a Python program that offered a REST API
+          and a browser client (such as this one &#127773;), and cross-platform functionality is a
+          concern.  Here are four parameters of interest, and a set of values for each parameter.
+        </p>
+        <b-table size="sm" striped hover :items="parameters">
+        </b-table>
+        <hr>
+        <p>
+          Testing all possible combinations would require 3 &times; 4 &times; 4 &times; 3 = 144
+          configurations.
+        </p>
+        <p>
+          Suppose that it would be acceptable to include every pair-wise interaction
+          in some test configuration, but that it is unlikely that there would be some issue
+          that would only appear if there was a particular 3-way or 4-way combination of values.
+          Then, a covering array of degree 2 would suffice.
+        </p>
+        <p>
+          Here is a covering array of degree 2 for the above parameters and values.  It consists
+          of only 16 configurations. Note that not all values are specified, as coverage is achieved
+          without a particular value in some slot.  Of course, a value would typically need to be
+          provided to complete the configuration, but any value will do.
+        </p>
+        <p>
+          To check pair-wise coverage:  deselect columns until there are 2 columns left.  Verify
+          that all possible combinations of the values for those 2 columns are contained within (at
+          least one) configuration.
+        </p>
+      </b-col>
+    </b-row>
+    <b-row size="sm">
+      <b-col cols="4" class="text-right font-weight-bold">
         Show columns:
       </b-col>
-      <b-col class="col">
+      <b-col>
         <b-checkbox
         :disabled="visibleFields.length == 2 && field.visible"
         v-for="field in configFields"
@@ -59,7 +63,7 @@
       (***) - Any value can be used in these configurations; specific values are not needed
       for coverage purposes.
     </p>
-  </div>
+  </b-container>
 </template>
 
 <script>

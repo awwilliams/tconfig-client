@@ -1,5 +1,5 @@
 <template>
-  <b-container class="col-sm-12">
+  <b-container sm>
     <h4>Test Configuration Generator</h4>
     <alert size="sm" show :message=message v-if="showMessage"></alert>
     <b-row>

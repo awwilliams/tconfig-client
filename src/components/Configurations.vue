@@ -1,7 +1,7 @@
 <template>
-  <b-container class="col-sm-12">
+  <b-container sm="12">
     <b-row>
-      <b-col cols="6" class="text-right">
+      <b-col cols="6" align-h="text-right">
         <label>Configurations per page</label>
       </b-col>
       <b-col cols="2">

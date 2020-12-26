@@ -1,6 +1,6 @@
 <template>
   <b-card-body>
-    <b-row class="align-items-start">
+    <b-row align-h="start">
       <b-col cols="1">
         <p>Values</p>
       </b-col>
