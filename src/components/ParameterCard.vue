@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="mb-1">
+  <b-card no-body>
     <parameter-item :parameter="parameter"
                     :index="index"
                     @edit-parameter="onEditParameter($event)"

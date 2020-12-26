@@ -1,19 +1,19 @@
 <template>
   <b-card-header header-tag="header" class="p-1" role="tab">
     <b-row>
-      <b-col class="col-6">
+      <b-col cols="6">
         <b-button size="sm" block href="#" v-b-toggle="'accordion-' + index"
                   variant="outline-secondary">{{parameter.name}} -
           {{parameter.values.length}} values
         </b-button>
       </b-col>
       <b-col>
-        <b-button pill variant="outline-dark" size="sm" class="mr-2">
+        <b-button pill variant="outline-dark" size="sm">
           <b-icon icon="arrow-down-up" aria-hidden="true"></b-icon> Drag to reorder
         </b-button>
       </b-col>
       <b-col>
-        <div class="btn-group" role="group">
+        <b-button-group>
           <b-button pill variant="warning" size="sm" class="mr-2"
                     v-b-modal.edit-parameter-form
                     @click="onEditParameter">
@@ -25,7 +25,7 @@
             <b-icon icon="trash" aria-hidden="true"></b-icon>
             Delete
           </b-button>
-        </div>
+        </b-button-group>
       </b-col>
     </b-row>
   </b-card-header>

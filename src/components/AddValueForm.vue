@@ -3,7 +3,7 @@
            id="add-value-form"
            title="Add a new value"
            hide-footer>
-    <b-form @submit="onSubmitAddValue" @reset="onResetAddValue" class="w-100">
+    <b-form @submit="onSubmitAddValue" @reset="onResetAddValue">
       <b-form-group id="form-add-value-name-group"
                     label="Name:"
                     label-for="form-add-value-name-input">

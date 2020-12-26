@@ -3,7 +3,7 @@
            id="edit-parameter-form"
            title="Edit parameter"
            hide-footer>
-    <b-form @submit="onSubmitEditParameter" @reset="onResetEditParameter" class="w-100">
+    <b-form @submit="onSubmitEditParameter" @reset="onResetEditParameter">
       <b-form-group id="form-edit-parameter-name-group"
                     label="Name:"
                     label-for="form-edit-parameter-name-input">

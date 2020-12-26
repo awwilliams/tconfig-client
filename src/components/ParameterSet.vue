@@ -1,19 +1,18 @@
 <template>
-  <div>
+  <b-container>
     <h6 class="text-left">Parameters:</h6>
     <draggable v-model="parameterList" group="parameters" item-key="uid"
                @start="drag=true" @end="drag=false" @change="onDragChange($event)">
-      <div :key="parameter.uid"
-           v-for="(parameter,pindex) in parameterList" role="tablist">
-        <parameter-card :parameter="parameter"
-                        :index="pindex"
-                        @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
-                        @add-value="$refs.addValueForm.setParameter($event)"
-                        @edit-value="$refs.editValueForm.onEditValue($event)"
-                        @reload-parameter-set="onReloadParameterSet"
-                        @alert-message="onAlertMessage($event)">
-        </parameter-card>
-      </div>
+      <parameter-card :key="parameter.uid"
+                      v-for="(parameter,pindex) in parameterList" role="tablist"
+                      :parameter="parameter"
+                      :index="pindex"
+                      @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
+                      @add-value="$refs.addValueForm.setParameter($event)"
+                      @edit-value="$refs.editValueForm.onEditValue($event)"
+                      @reload-parameter-set="onReloadParameterSet"
+                      @alert-message="onAlertMessage($event)">
+      </parameter-card>
     </draggable>
     <add-parameter-form ref="addParameterForm"
                         @alert-message="onAlertMessage($event)"
@@ -31,7 +30,7 @@
                      @alert-message="onAlertMessage($event)"
                      @reload-parameter-set="onReloadParameterSet">
     </edit-value-form>
-  </div>
+  </b-container>
 </template>
 
 <script>

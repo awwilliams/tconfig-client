@@ -4,7 +4,7 @@
       id="generate_configurations-form"
       title="Generate Configurations"
       hide-footer>
-    <b-form @submit="onSubmitGenerateForm" @reset="onResetGenerateForm" class="w-100">
+    <b-form @submit="onSubmitGenerateForm" @reset="onResetGenerateForm">
       <b-form-group id="form-generate-configs-algorithm-group"
                     label="Generation algorithm:"
                     label-for="form-generate-configs-algorithm-input">
