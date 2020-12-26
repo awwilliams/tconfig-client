@@ -1,31 +1,35 @@
 <template>
-  <div class="container">
-    <div class="col-sm-12">
-      <b-row>
-        <b-col class="col-sm-6 text-right">
-          <label>Configurations per page</label>
-        </b-col>
-        <b-col class="col-sm-2">
-          <b-form-select class="w-10" v-model="perPage"
+  <b-container class="col-sm-12">
+    <b-row>
+      <b-col cols="6" class="text-right">
+        <label>Configurations per page</label>
+      </b-col>
+      <b-col cols="2">
+        <b-form-select class="w-10" v-model="perPage"
                          :options="options">
-          </b-form-select>
-        </b-col>
-      </b-row>
-    </div>
+        </b-form-select>
+      </b-col>
+    </b-row>
     <p></p>
-    <b-table size="sm" striped hover bordered :items="configurations"
-             :current-page="currentPage" :per-page="perPage">
-    </b-table>
-    <div class="justify-content-center row my-0">
-      <b-pagination size="sm" :total-rows="configurations.length"
-                    :per-page="perPage" v-model="currentPage"/>
-    </div>
+    <b-row>
+      <b-col>
+        <b-table size="sm" striped hover bordered :items="configurations"
+                 :current-page="currentPage" :per-page="perPage">
+        </b-table>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="12">
+        <b-pagination size="sm" :total-rows="configurations.length" align="center"
+                      :per-page="perPage" v-model="currentPage"/>
+        </b-col>
+    </b-row>
     <generate-configurations-form ref="generateConfigurationsForm"
                                   :parameterSet="parameterSet"
                                   @configurations-generated="configurationsGenerated($event)"
                                   @alert-message="alertMessage($event)">
     </generate-configurations-form>
-  </div>
+  </b-container>
 </template>
 
 <script>

@@ -1,10 +1,10 @@
 <template>
   <b-card-body>
-    <b-row class="row align-items-start">
-      <b-col class="col-sm-1">
+    <b-row class="align-items-start">
+      <b-col cols="1">
         <p>Values</p>
       </b-col>
-      <b-col class="col-sm-6">
+      <b-col cols="6">
         <b-button pill variant="success" size="sm"
                   v-b-modal.add-value-form
                   @click="onAddValue">
@@ -15,20 +15,21 @@
       </b-col>
     </b-row>
     <hr>
-    <ul class="list-group list-group-flush">
-    <draggable v-model="valueList" group="values" item-key="uid"
-               @start="drag=true" @end="drag=false" @change="onDragChange($event)">
-      <div :key="value.uid" v-for="(value,vindex) in valueList" role="tablist">
-        <value-item :parameter="parameter"
+    <b-list-group flush>
+      <draggable v-model="valueList" group="values" item-key="uid"
+                 @start="drag=true" @end="drag=false" @change="onDragChange($event)">
+        <value-item :key="value.uid"
+                    v-for="(value,vindex) in valueList"
+                    role="tablist"
+                    :parameter="parameter"
                     :value="value"
                     :index="vindex"
                     @edit-value="onEditValue($event)"
                     @reload-parameter-set="onReloadParameterSet"
                     @alert-message="onAlertMessage($event)">
         </value-item>
-      </div>
-    </draggable>
-    </ul>
+      </draggable>
+    </b-list-group>
   </b-card-body>
 </template>
 

@@ -1,14 +1,14 @@
 <template>
-  <li class="list-group-item">
+  <b-list-group-item>
     <b-row size="sm">
       <b-col>{{value.name}}</b-col>
       <b-col>
-        <b-button pill variant="outline-info" size="sm" class="mr-2">
+        <b-button pill variant="outline-dark" size="sm">
           <b-icon icon="arrow-down-up" aria-hidden="true"></b-icon>
         </b-button>
       </b-col>
       <b-col>
-        <div class="btn-group" role="group">
+        <b-button-group>
           <b-button pill variant="warning" size="sm" class="mr-2"
                     v-b-modal.edit-value-form
                     @click="onEditValue">
@@ -18,10 +18,10 @@
                     @click="onDeleteValue(parameter, value)">
             <b-icon icon="trash" aria-hidden="true"></b-icon>
           </b-button>
-        </div>
+        </b-button-group>
       </b-col>
     </b-row>
-  </li>
+  </b-list-group-item>
 </template>
 
 <script>
