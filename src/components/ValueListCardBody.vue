@@ -25,7 +25,7 @@
                     :value="value"
                     :index="vindex"
                     @edit-value="onEditValue($event)"
-                    @reload-parameter-set="onReloadParameterSet"
+                    @parameter-set-updated="onParameterSetUpdated($event)"
                     @alert-message="onAlertMessage($event)">
         </value-item>
       </draggable>
@@ -35,8 +35,7 @@
 
 <script>
 import draggable from 'vuedraggable';
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
 
 import ValueItem from './ValueItem.vue';
 
@@ -44,6 +43,7 @@ export default {
   props: {
     parameter: Object,
   },
+  mixins: [apiMixin],
   components: {
     draggable,
     'value-item': ValueItem,
@@ -69,8 +69,8 @@ export default {
     onAlertMessage(message) {
       this.$emit('alert-message', message);
     },
-    onReloadParameterSet() {
-      this.$emit('reload-parameter-set');
+    onParameterSetUpdated(parameterSet) {
+      this.$emit('parameter-set-updated', parameterSet);
     },
     onAddValue() {
       this.$emit('add-value', this.parameter);
@@ -82,30 +82,9 @@ export default {
       if ('moved' in eventInfo) {
         const { oldIndex, newIndex } = eventInfo.moved;
         const movedValue = this.valueList[newIndex];
-        this.moveValue(this.parameter, movedValue.name, oldIndex, newIndex);
+        // Next line function in 'apiMixin'
+        this.apiMoveValue(this.parameter, movedValue.name, oldIndex, newIndex);
       }
-    },
-    onMoveValue(eventInfo) {
-      this.moveValue(eventInfo.parameter, eventInfo.name, eventInfo.oldIndex, eventInfo.newIndex);
-    },
-    moveValue(parameter, name, oldIndex, newIndex) {
-      const path = Config.apiPrefix.concat(`parameters/${parameter.uid}/values/`);
-      const payload = {
-        oldIndex,
-        newIndex,
-      };
-      axios.put(path, payload)
-        .then(() => {
-          this.onReloadParameterSet();
-          let message = `Value "${name}" moved from position ${oldIndex} to ${newIndex}`;
-          message = message.concat(` within parameter "${parameter.name}"`);
-          this.onAlertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-          this.onReloadParameterSet();
-        });
     },
   },
   created() {

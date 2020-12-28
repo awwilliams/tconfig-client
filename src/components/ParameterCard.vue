@@ -3,14 +3,14 @@
     <parameter-item :parameter="parameter"
                     :index="index"
                     @edit-parameter="onEditParameter($event)"
-                    @reload-parameter-set="onReloadParameterSet"
+                    @parameter-set-updated="onParameterSetUpdated($event)"
                     @alert-message="onAlertMessage($event)">
     </parameter-item>
     <b-collapse :id="'accordion-' + index" accordion="my-accordion" role="tabpanel">
       <value-list :parameter="parameter"
                   @add-value="onAddValue"
                   @edit-value="onEditValue($event)"
-                  @reload-parameter-set="onReloadParameterSet"
+                  @parameter-set-updated="onParameterSetUpdated($event)"
                   @alert-message="onAlertMessage($event)">
       </value-list>
     </b-collapse>
@@ -34,8 +34,8 @@ export default {
     onAlertMessage(message) {
       this.$emit('alert-message', message);
     },
-    onReloadParameterSet() {
-      this.$emit('reload-parameter-set');
+    onParameterSetUpdated(parameterSet) {
+      this.$emit('parameter-set-updated', parameterSet);
     },
     onEditParameter() {
       this.$emit('edit-parameter', this.parameter);

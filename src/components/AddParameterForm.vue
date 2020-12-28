@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
 
 export default {
+  mixins: [apiMixin],
   data() {
     return {
       addParameterForm: {
@@ -38,39 +38,17 @@ export default {
     initForm() {
       this.addParameterForm.name = '';
     },
-    alertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    reloadParameterSet() {
-      this.$emit('reload-parameter-set');
-    },
     onSubmitAddParameter(evt) {
       evt.preventDefault();
       this.$refs.addParameterForm.hide();
-      this.addParameter(this.addParameterForm.name);
+      // Next line function in 'apiMixin'
+      this.apiAddParameter(this.addParameterForm.name);
       this.initForm();
     },
     onResetAddParameter(evt) {
       evt.preventDefault();
       this.$refs.addParameterForm.hide();
       this.initForm();
-    },
-    addParameter(newName) {
-      const path = Config.apiPrefix.concat('parameters/');
-      const payload = {
-        name: newName,
-      };
-      axios.post(path, payload)
-        .then(() => {
-          const message = `Parameter "${newName}" added`;
-          this.alertMessage(message);
-          this.reloadParameterSet();
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-          this.reloadParameterSet();
-        });
     },
   },
   created() {

@@ -32,13 +32,13 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
 
 export default {
   props: {
     parameterSet: Object,
   },
+  mixins: [apiMixin],
   data() {
     return {
       coverageDegreeOptions: [2, 3, 4, 5, 6],
@@ -59,34 +59,15 @@ export default {
     onSubmitGenerateForm(evt) {
       evt.preventDefault();
       this.$refs.generateConfigurationsForm.hide();
-      this.generateConfigurations();
+      // Next line function in 'apiMixin'
+      this.apiGenerateConfigurations(this.parameterSet, this.form.algorithmName,
+        this.form.coverageDegree);
       this.initForm();
     },
     onResetGenerateForm(evt) {
       evt.preventDefault();
       this.$refs.generateConfigurationsForm.hide();
       this.initForm();
-    },
-    generateConfigurations() {
-      const path = Config.apiPrefix.concat('generate/');
-      const payload = {
-        algorithm_name: this.form.algorithmName,
-        coverage_degree: this.form.coverageDegree,
-        parameter_set: this.parameterSet,
-        existing_configurations: [],
-      };
-      axios.post(path, payload)
-        .then((response) => {
-          const configurationSet = response.data.configuration_set;
-          const numConfigs = configurationSet.configurations.length;
-          const message = `${numConfigs} configurations generated`;
-          this.$emit('alert-message', message);
-          this.$emit('configurations-generated', configurationSet);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
     },
   },
   created() {

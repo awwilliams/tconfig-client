@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
 
 export default {
+  mixins: [apiMixin],
   data() {
     return {
       addValueForm: {
@@ -39,42 +39,20 @@ export default {
     initForm() {
       this.addValueForm.name = '';
     },
-    alertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    reloadParameterSet() {
-      this.$emit('reload-parameter-set');
-    },
     setParameter(parameter) {
       this.parameter = parameter;
     },
     onSubmitAddValue(evt) {
       evt.preventDefault();
       this.$refs.addValueForm.hide();
-      this.addValue(this.parameter, this.addValueForm.name);
+      // Next line function in 'apiMixin'
+      this.apiAddValue(this.parameter, this.addValueForm.name);
       this.initForm();
     },
     onResetAddValue(evt) {
       evt.preventDefault();
       this.$refs.addValueForm.hide();
       this.initForm();
-    },
-    addValue(parameter, newName) {
-      const path = Config.apiPrefix.concat(`parameters/${parameter.uid}/values/`);
-      const payload = {
-        name: newName,
-      };
-      axios.post(path, payload)
-        .then(() => {
-          this.reloadParameterSet();
-          const message = `Value "${newName}" added to parameter "${parameter.name}"`;
-          this.alertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-          this.reloadParameterSet();
-        });
     },
   },
   created() {

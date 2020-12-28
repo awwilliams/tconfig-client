@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
 
 export default {
+  mixins: [apiMixin],
   data() {
     return {
       form: {
@@ -40,12 +40,6 @@ export default {
       this.form.uid = '';
       this.form.name = '';
     },
-    alertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    reloadParameterSet() {
-      this.$emit('reload-parameter-set');
-    },
     onEditParameter(parameter) {
       this.form = parameter;
       this.oldParameterName = parameter.name;
@@ -53,7 +47,8 @@ export default {
     onSubmitEditParameter(evt) {
       evt.preventDefault();
       this.$refs.editParameterForm.hide();
-      this.editParameter(this.form);
+      // Next line function in 'apiMixin'
+      this.apiEditParameter(this.form, this.oldParameterName);
       this.initForm();
     },
     onResetEditParameter(evt) {
@@ -62,23 +57,6 @@ export default {
       this.initForm();
       this.oldParameterName = '';
       this.reloadParameterSet();
-    },
-    editParameter(parameter) {
-      const path = Config.apiPrefix.concat('parameters/').concat(parameter.uid);
-      const payload = {
-        name: parameter.name,
-      };
-      axios.patch(path, payload)
-        .then(() => {
-          this.reloadParameterSet();
-          const message = `Parameter renamed from "${this.oldParameterName}" to "${payload.name}"`;
-          this.alertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.reloadParameterSet();
-        });
     },
   },
   created() {

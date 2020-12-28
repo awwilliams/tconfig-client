@@ -21,7 +21,7 @@
     <hr>
     <parameter-set :parameterSet="parameterSet"
                    @alert-message="onAlertMessage($event)"
-                   @reload-parameter-set="getParameterSet($event)">
+                   @parameter-set-updated="onUpdateParameterSet($event)">
     </parameter-set>
     <hr>
     <configurations :parameterSet="parameterSet"
@@ -31,13 +31,14 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
+
 import Alert from './Alert.vue';
 import ParameterSet from './ParameterSet.vue';
 import Configurations from './Configurations.vue';
 
 export default {
+  mixins: [apiMixin],
   data() {
     return {
       parameterSet: {},
@@ -51,24 +52,17 @@ export default {
     configurations: Configurations,
   },
   methods: {
-    getParameterSet() {
-      const path = Config.apiPrefix.concat('parameterset/');
-      axios.get(path)
-        .then((res) => {
-          this.parameterSet = res.data.parameter_set;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
-    },
     onAlertMessage(message) {
       this.message = message;
       this.showMessage = true;
     },
+    onUpdateParameterSet(parameterSet) {
+      this.parameterSet = parameterSet;
+    },
   },
   created() {
-    this.getParameterSet();
+    const local = true;
+    this.apiGetParameterSet(local);
   },
 };
 
