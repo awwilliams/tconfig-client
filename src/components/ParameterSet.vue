@@ -10,33 +10,32 @@
                       @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
                       @add-value="$refs.addValueForm.setParameter($event)"
                       @edit-value="$refs.editValueForm.onEditValue($event)"
-                      @reload-parameter-set="onReloadParameterSet"
+                      @parameter-set-updated="onParameterSetUpdated($event)"
                       @alert-message="onAlertMessage($event)">
       </parameter-card>
     </draggable>
     <add-parameter-form ref="addParameterForm"
                         @alert-message="onAlertMessage($event)"
-                        @reload-parameter-set="onReloadParameterSet">
+                        @parameter-set-updated="onParameterSetUpdated($event)">
     </add-parameter-form>
     <edit-parameter-form ref="editParameterForm"
                          @alert-message="onAlertMessage($event)"
-                         @reload-parameter-set="onReloadParameterSet">
+                         @parameter-set-updated="onParameterSetUpdated($event)">
     </edit-parameter-form>
     <add-value-form ref="addValueForm"
                     @alert-message="onAlertMessage($event)"
-                    @reload-parameter-set="onReloadParameterSet">
+                    @parameter-set-updated="onParameterSetUpdated($event)">
     </add-value-form>
     <edit-value-form ref="editValueForm"
                      @alert-message="onAlertMessage($event)"
-                     @reload-parameter-set="onReloadParameterSet">
+                     @parameter-set-updated="onParameterSetUpdated($event)">
     </edit-value-form>
   </b-container>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
 
 import ParameterCard from './ParameterCard.vue';
 import AddParameterForm from './AddParameterForm.vue';
@@ -60,6 +59,7 @@ export default {
       }
     },
   },
+  mixins: [apiMixin],
   data() {
     return {
       parameterList: [],
@@ -77,37 +77,17 @@ export default {
     onAlertMessage(message) {
       this.$emit('alert-message', message);
     },
-    onReloadParameterSet() {
-      this.$emit('reload-parameter-set');
+    onParameterSetUpdated(parameterSet) {
+      this.$emit('parameter-set-updated', parameterSet);
     },
     onDragChange(eventInfo) {
       if ('moved' in eventInfo) {
         const { oldIndex, newIndex } = eventInfo.moved;
         const movedParameter = this.parameterList[newIndex];
-        this.moveParameter(movedParameter.name, oldIndex, newIndex);
+        // Next line function in 'apiMixin'
+        this.apiMoveParameter(movedParameter.name, oldIndex, newIndex);
       }
     },
-    moveParameter(name, oldIndex, newIndex) {
-      const path = Config.apiPrefix.concat('parameters/');
-      const payload = {
-        oldIndex,
-        newIndex,
-      };
-      axios.put(path, payload)
-        .then(() => {
-          this.onReloadParameterSet();
-          const message = `Parameter "${name}" moved from position ${oldIndex} to ${newIndex}`;
-          this.onAlertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-          this.onReloadParameterSet();
-        });
-    },
-  },
-  created() {
-    this.parameterList = [...this.parameterSet.parameters];
   },
 };
 

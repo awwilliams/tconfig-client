@@ -32,54 +32,36 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Config from './config';
+import apiMixin from '../mixins/rest_api';
+import dialogConfigMixin from '../mixins/confirm_dialog_options';
 
 export default {
   props: {
     parameter: Object,
     index: Number,
   },
+  mixins: [apiMixin, dialogConfigMixin],
   methods: {
-    alertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    reloadParameterSet() {
-      this.$emit('reload-parameter-set');
-    },
     onEditParameter() {
       this.$emit('edit-parameter', this.parameter);
     },
     onDeleteParameter() {
       this.$bvModal.msgBoxConfirm(
         `Please confirm that you want to delete parameter "${this.parameter.name}".`,
-        Config.confirmDialogOptions,
+        this.confirmDialogOptions,
       )
         .then((confirmed) => {
           if (confirmed) {
-            this.deleteParameter();
+            // Next line function in 'apiMixin'
+            this.apiDeleteParameter(this.parameter);
           } else {
             const message = 'Cancelled parameter delete';
-            this.alertMessage(message);
+            this.$emit('alert-message', message);
           }
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-        });
-    },
-    deleteParameter() {
-      const path = Config.apiPrefix.concat('parameters/').concat(this.parameter.uid);
-      axios.delete(path)
-        .then(() => {
-          this.reloadParameterSet();
-          const message = `Parameter "${this.parameter.name}" removed`;
-          this.alertMessage(message);
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-          this.reloadParameterSet();
         });
     },
   },
