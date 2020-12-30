@@ -7,7 +7,7 @@
       <b-col cols="6">
         <b-button pill variant="success" size="sm"
                   v-b-modal.add-value-form
-                  @click="onAddValue">
+                  @click="addValueForm.setParameter(parameter)">
           <b-icon icon="plus-square-fill" aria-hidden="true" font-scale="1.5">
           </b-icon>
           Add Value
@@ -24,9 +24,7 @@
                     :parameter="parameter"
                     :value="value"
                     :index="vindex"
-                    @edit-value="onEditValue($event)"
-                    @parameter-set-updated="onParameterSetUpdated($event)"
-                    @alert-message="onAlertMessage($event)">
+                    :editValueForm="editValueForm">
         </value-item>
       </draggable>
     </b-list-group>
@@ -42,6 +40,8 @@ import ValueItem from './ValueItem.vue';
 export default {
   props: {
     parameter: Object,
+    addValueForm: Object,
+    editValueForm: Object,
   },
   mixins: [apiMixin],
   components: {
@@ -66,18 +66,6 @@ export default {
     };
   },
   methods: {
-    onAlertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    onParameterSetUpdated(parameterSet) {
-      this.$emit('parameter-set-updated', parameterSet);
-    },
-    onAddValue() {
-      this.$emit('add-value', this.parameter);
-    },
-    onEditValue(value) {
-      this.$emit('edit-value', value);
-    },
     onDragChange(eventInfo) {
       if ('moved' in eventInfo) {
         const { oldIndex, newIndex } = eventInfo.moved;

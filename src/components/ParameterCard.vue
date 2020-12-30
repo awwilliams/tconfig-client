@@ -2,16 +2,12 @@
   <b-card no-body>
     <parameter-item :parameter="parameter"
                     :index="index"
-                    @edit-parameter="onEditParameter($event)"
-                    @parameter-set-updated="onParameterSetUpdated($event)"
-                    @alert-message="onAlertMessage($event)">
+                    :editParameterForm="editParameterForm">
     </parameter-item>
     <b-collapse :id="'accordion-' + index" accordion="my-accordion" role="tabpanel">
       <value-list :parameter="parameter"
-                  @add-value="onAddValue"
-                  @edit-value="onEditValue($event)"
-                  @parameter-set-updated="onParameterSetUpdated($event)"
-                  @alert-message="onAlertMessage($event)">
+                  :addValueForm="addValueForm"
+                  :editValueForm="editValueForm">
       </value-list>
     </b-collapse>
   </b-card>
@@ -25,27 +21,13 @@ export default {
   props: {
     parameter: Object,
     index: Number,
+    editParameterForm: Object,
+    addValueForm: Object,
+    editValueForm: Object,
   },
   components: {
     'parameter-item': ParameterItemCardHeader,
     'value-list': ValueListCardBody,
-  },
-  methods: {
-    onAlertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    onParameterSetUpdated(parameterSet) {
-      this.$emit('parameter-set-updated', parameterSet);
-    },
-    onEditParameter() {
-      this.$emit('edit-parameter', this.parameter);
-    },
-    onAddValue() {
-      this.$emit('add-value', this.parameter);
-    },
-    onEditValue(value) {
-      this.$emit('edit-value', value);
-    },
   },
 };
 

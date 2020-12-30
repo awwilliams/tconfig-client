@@ -6,6 +6,6 @@ describe('TConfig main page', () => {
   });
   it('should have a heading "Test Configuration Generator"', () => {
     cy.visit('/');
-    cy.contains('h1', 'Test Configuration Generator');
+    cy.contains('h4', 'Test Configuration Generator');
   });
 });

@@ -16,7 +16,7 @@
         <b-button-group>
           <b-button pill variant="warning" size="sm" class="mr-2"
                     v-b-modal.edit-parameter-form
-                    @click="onEditParameter">
+                    @click="editParameterForm.onEditParameter(parameter)">
             <b-icon icon="pencil" aria-hidden="true"></b-icon>
             Update
           </b-button>
@@ -39,12 +39,10 @@ export default {
   props: {
     parameter: Object,
     index: Number,
+    editParameterForm: Object,
   },
   mixins: [apiMixin, dialogConfigMixin],
   methods: {
-    onEditParameter() {
-      this.$emit('edit-parameter', this.parameter);
-    },
     onDeleteParameter() {
       this.$bvModal.msgBoxConfirm(
         `Please confirm that you want to delete parameter "${this.parameter.name}".`,
@@ -56,10 +54,11 @@ export default {
             this.apiDeleteParameter(this.parameter);
           } else {
             const message = 'Cancelled parameter delete';
-            this.$emit('alert-message', message);
+            this.setStatus(message, 'warning');
           }
         })
         .catch((error) => {
+          this.setStatus(error, 'danger');
           // eslint-disable-next-line
           console.error(error);
         });

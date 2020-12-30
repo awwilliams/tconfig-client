@@ -11,7 +11,7 @@
         <b-button-group>
           <b-button pill variant="warning" size="sm" class="mr-2"
                     v-b-modal.edit-value-form
-                    @click="onEditValue">
+                    @click="editValueForm.onEditValue(value)">
             <b-icon icon="pencil" aria-hidden="true"></b-icon>
           </b-button>
           <b-button pill variant="danger" size="sm" class="mr-2"
@@ -33,12 +33,10 @@ export default {
     parameter: Object,
     value: Object,
     index: Number,
+    editValueForm: Object,
   },
   mixins: [apiMixin, dialogConfigMixin],
   methods: {
-    onEditValue() {
-      this.$emit('edit-value', this.value);
-    },
     onDeleteValue() {
       this.$bvModal.msgBoxConfirm(
         `Please confirm that you want to delete value "${this.value.name}".`,
@@ -50,10 +48,11 @@ export default {
             this.apiDeleteValue(this.parameter, this.value);
           } else {
             const message = 'Cancelled value delete';
-            this.$emit('alert-message', message);
+            this.setStatus(message, 'warning');
           }
         })
         .catch((error) => {
+          this.setStatus(error, 'danger');
           // eslint-disable-next-line
           console.error(error);
         });

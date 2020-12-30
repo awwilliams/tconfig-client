@@ -1,4 +1,4 @@
-export default {
+const dialogConfig = {
   data() {
     return {
       confirmDialogOptions: {
@@ -15,3 +15,5 @@ export default {
     };
   },
 };
+
+export default dialogConfig;

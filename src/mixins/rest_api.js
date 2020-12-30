@@ -5,28 +5,25 @@ const PARAMETER_SET_URL = API_PREFIX.concat('parameterset/');
 const PARAMETER_URL = API_PREFIX.concat('parameters/');
 const VALUE_URL = API_PREFIX.concat('values/');
 const GENERATE_URL = API_PREFIX.concat('generate/');
-const PARAMETER_SET_UPDATED_EVENT = 'parameter-set-updated';
-const ALERT_EVENT = 'alert-message';
-const GENERATE_EVENT = 'configurations-generated';
 
-export default {
-  data() {
-    return {
-    };
-  },
+const restApi = {
   methods: {
+    setStatus(message, variant) {
+      const statusInfo = {
+        message,
+        variant,
+      };
+      this.$store.commit('setStatus', statusInfo);
+    },
     axiosError(error) {
+      this.setStatus(error, 'danger');
       // eslint-disable-next-line
       console.error(error);
     },
-    apiGetParameterSet(local = false) {
+    apiGetParameterSet() {
       axios.get(PARAMETER_SET_URL)
         .then((response) => {
-          if (local) {
-            this.parameterSet = response.data.parameter_set;
-          } else {
-            this.$emit(PARAMETER_SET_UPDATED_EVENT, response.data.parameter_set);
-          }
+          this.$store.commit('setParameterSet', response.data.parameter_set);
         })
         .catch((error) => {
           this.axiosError(error);
@@ -44,7 +41,7 @@ export default {
         .then(() => {
           this.apiGetParameterSet();
           const message = `Parameter "${newName}" added`;
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -58,7 +55,7 @@ export default {
         .then(() => {
           this.apiGetParameterSet();
           const message = `Parameter renamed from "${oldName}" to "${payload.name}"`;
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -73,7 +70,7 @@ export default {
         .then(() => {
           this.apiGetParameterSet();
           const message = `Parameter "${name}" moved from position ${oldIndex} to ${newIndex}`;
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -84,7 +81,7 @@ export default {
         .then(() => {
           this.apiGetParameterSet();
           const message = `Parameter "${parameter.name}" removed`;
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -99,7 +96,7 @@ export default {
         .then(() => {
           this.apiGetParameterSet();
           const message = `Value "${newName}" added to parameter "${parameter.name}"`;
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -113,7 +110,7 @@ export default {
         .then(() => {
           this.apiGetParameterSet();
           const message = `Value renamed from "${oldName}" to "${payload.name}"`;
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -130,7 +127,7 @@ export default {
           this.apiGetParameterSet();
           let message = `Value "${name}" moved from position ${oldIndex} to ${newIndex}`;
           message = message.concat(` within parameter "${parameter.name}"`);
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -142,7 +139,7 @@ export default {
           this.apiGetParameterSet();
           let message = `Value "${value.name}" removed from `;
           message = message.concat(`parameter "${parameter.name}"`);
-          this.$emit(ALERT_EVENT, message);
+          this.setStatus(message, 'success');
         })
         .catch((error) => {
           this.axiosDataError(error);
@@ -160,8 +157,8 @@ export default {
           const configurationSet = response.data.configuration_set;
           const numConfigs = configurationSet.configurations.length;
           const message = `${numConfigs} configurations generated`;
-          this.$emit(ALERT_EVENT, message);
-          this.$emit(GENERATE_EVENT, configurationSet);
+          this.setStatus(message, 'success');
+          this.$store.commit('setConfigurationSet', configurationSet);
         })
         .catch((error) => {
           this.axiosError(error);
@@ -169,3 +166,5 @@ export default {
     },
   },
 };
+
+export default restApi;
