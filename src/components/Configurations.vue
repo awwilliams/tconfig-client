@@ -25,9 +25,7 @@
         </b-col>
     </b-row>
     <generate-configurations-form ref="generateConfigurationsForm"
-                                  :parameterSet="parameterSet"
-                                  @configurations-generated="configurationsGenerated($event)"
-                                  @alert-message="alertMessage($event)">
+                                  :parameterSet="parameterSet">
     </generate-configurations-form>
   </b-container>
 </template>
@@ -39,10 +37,23 @@ export default {
   props: {
     parameterSet: Object,
   },
+  computed: {
+    configurationSet() {
+      return this.$store.getters.configurationSet;
+    },
+  },
+  watch: {
+    configurationSet(newVal) {
+      if ('configurations' in newVal) {
+        this.convertConfigurationsForDisplay();
+      } else {
+        this.configurations = [];
+      }
+    },
+  },
   data() {
     return {
       configurations: [],
-      configurationSet: {},
       perPage: 5,
       currentPage: 1,
       options: [
@@ -57,13 +68,6 @@ export default {
     'generate-configurations-form': GenerateConfigurationsForm,
   },
   methods: {
-    alertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    configurationsGenerated(configurationSet) {
-      this.configurationSet = configurationSet;
-      this.convertConfigurationsForDisplay();
-    },
     convertConfigurationsForDisplay() {
       this.configurations = [];
       this.configurationSet.configurations.forEach((config) => {

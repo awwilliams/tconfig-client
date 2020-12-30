@@ -1,7 +1,7 @@
 <template>
   <b-modal
       ref="generateConfigurationsForm"
-      id="generate_configurations-form"
+      id="generate-configurations-form"
       title="Generate Configurations"
       hide-footer>
     <b-form @submit="onSubmitGenerateForm" @reset="onResetGenerateForm">

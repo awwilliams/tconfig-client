@@ -1,5 +1,9 @@
 <template>
   <b-container>
+    <add-parameter-form ref="addParameterForm"></add-parameter-form>
+    <edit-parameter-form ref="editParameterForm"></edit-parameter-form>
+    <add-value-form ref="addValueForm"></add-value-form>
+    <edit-value-form ref="editValueForm"></edit-value-form>
     <h6 class="text-left">Parameters:</h6>
     <draggable v-model="parameterList" group="parameters" item-key="uid"
                @start="drag=true" @end="drag=false" @change="onDragChange($event)">
@@ -7,29 +11,11 @@
                       v-for="(parameter,pindex) in parameterList" role="tablist"
                       :parameter="parameter"
                       :index="pindex"
-                      @edit-parameter="$refs.editParameterForm.onEditParameter(parameter)"
-                      @add-value="$refs.addValueForm.setParameter($event)"
-                      @edit-value="$refs.editValueForm.onEditValue($event)"
-                      @parameter-set-updated="onParameterSetUpdated($event)"
-                      @alert-message="onAlertMessage($event)">
+                      :editParameterForm="$refs.editParameterForm"
+                      :addValueForm="$refs.addValueForm"
+                      :editValueForm="$refs.editValueForm">
       </parameter-card>
     </draggable>
-    <add-parameter-form ref="addParameterForm"
-                        @alert-message="onAlertMessage($event)"
-                        @parameter-set-updated="onParameterSetUpdated($event)">
-    </add-parameter-form>
-    <edit-parameter-form ref="editParameterForm"
-                         @alert-message="onAlertMessage($event)"
-                         @parameter-set-updated="onParameterSetUpdated($event)">
-    </edit-parameter-form>
-    <add-value-form ref="addValueForm"
-                    @alert-message="onAlertMessage($event)"
-                    @parameter-set-updated="onParameterSetUpdated($event)">
-    </add-value-form>
-    <edit-value-form ref="editValueForm"
-                     @alert-message="onAlertMessage($event)"
-                     @parameter-set-updated="onParameterSetUpdated($event)">
-    </edit-value-form>
   </b-container>
 </template>
 
@@ -74,12 +60,6 @@ export default {
     'edit-value-form': EditValueForm,
   },
   methods: {
-    onAlertMessage(message) {
-      this.$emit('alert-message', message);
-    },
-    onParameterSetUpdated(parameterSet) {
-      this.$emit('parameter-set-updated', parameterSet);
-    },
     onDragChange(eventInfo) {
       if ('moved' in eventInfo) {
         const { oldIndex, newIndex } = eventInfo.moved;
