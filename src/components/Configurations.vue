@@ -24,8 +24,7 @@
                       :per-page="perPage" v-model="currentPage"/>
         </b-col>
     </b-row>
-    <generate-configurations-form ref="generateConfigurationsForm"
-                                  :parameterSet="parameterSet">
+    <generate-configurations-form ref="generateConfigurationsForm">
     </generate-configurations-form>
   </b-container>
 </template>
@@ -34,9 +33,6 @@
 import GenerateConfigurationsForm from './GenerateConfigurationsForm.vue';
 
 export default {
-  props: {
-    parameterSet: Object,
-  },
   computed: {
     configurationSet() {
       return this.$store.getters.configurationSet;

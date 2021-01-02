@@ -16,9 +16,13 @@ const restApi = {
       this.$store.commit('setStatus', statusInfo);
     },
     axiosError(error) {
-      this.setStatus(error, 'danger');
+      if ('message' in error) {
+        this.setStatus(error.message, 'danger');
+      } else {
+        this.setStatus('An error occurred during API call', 'danger');
+      }
       // eslint-disable-next-line
-      console.error(error);
+      console.error(error.toJSON());
     },
     apiGetParameterSet() {
       axios.get(PARAMETER_SET_URL)

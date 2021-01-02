@@ -30,8 +30,10 @@ import AddValueForm from './AddValueForm.vue';
 import EditValueForm from './EditValueForm.vue';
 
 export default {
-  props: {
-    parameterSet: Object,
+  computed: {
+    parameterSet() {
+      return this.$store.getters.parameterSet;
+    },
   },
   // Take a copy of the list of parameters to set up drag and
   // drop for re-ordering parameters - mutating a prop directly
@@ -68,6 +70,9 @@ export default {
         this.apiMoveParameter(movedParameter.name, oldIndex, newIndex);
       }
     },
+  },
+  created() {
+    this.apiGetParameterSet();
   },
 };
 

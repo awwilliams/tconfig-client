@@ -1,10 +1,10 @@
 <template>
   <b-card-body>
     <b-row align-h="start">
-      <b-col cols="1">
+      <b-col>
         <p>Values</p>
       </b-col>
-      <b-col cols="6">
+      <b-col>
         <b-button pill variant="success" size="sm"
                   v-b-modal.add-value-form
                   @click="addValueForm.setParameter(parameter)">
