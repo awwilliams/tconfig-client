@@ -19,27 +19,19 @@
       </b-col>
     </b-row>
     <hr>
-    <parameter-set :parameterSet="parameterSet">
-    </parameter-set>
+    <parameter-set></parameter-set>
     <hr>
-    <configurations :parameterSet="parameterSet">
-    </configurations>
+    <configurations> </configurations>
   </b-container>
 </template>
 
 <script>
-import apiMixin from '../mixins/rest_api';
-
 import Status from './Status.vue';
 import ParameterSet from './ParameterSet.vue';
 import Configurations from './Configurations.vue';
 
 export default {
-  mixins: [apiMixin],
   computed: {
-    parameterSet() {
-      return this.$store.getters.parameterSet;
-    },
     status() {
       return this.$store.getters.status;
     },
@@ -48,9 +40,6 @@ export default {
     status: Status,
     'parameter-set': ParameterSet,
     configurations: Configurations,
-  },
-  created() {
-    this.apiGetParameterSet();
   },
 };
 

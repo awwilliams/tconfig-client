@@ -1,5 +1,6 @@
 /.editorconfig
 /.idea/
+/.vs/
 /.settings/
 /debug.log
 /node_modules/

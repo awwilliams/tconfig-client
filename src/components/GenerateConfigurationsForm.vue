@@ -35,9 +35,6 @@
 import apiMixin from '../mixins/rest_api';
 
 export default {
-  props: {
-    parameterSet: Object,
-  },
   mixins: [apiMixin],
   data() {
     return {
@@ -60,7 +57,8 @@ export default {
       evt.preventDefault();
       this.$refs.generateConfigurationsForm.hide();
       // Next line function in 'apiMixin'
-      this.apiGenerateConfigurations(this.parameterSet, this.form.algorithmName,
+      this.apiGenerateConfigurations(this.$store.getters.parameterSet,
+        this.form.algorithmName,
         this.form.coverageDegree);
       this.initForm();
     },
